@@ -1,3 +1,8 @@
+// ---------------------------------------------------------------------
+// 			VT CS2304 Final Project
+// 			      Danny Torney
+// ---------------------------------------------------------------------
+
 #include <rock_paper_scissors.hpp>
 
 // used to preinitialize some state
@@ -14,7 +19,21 @@ void rock_paper_scissors::bootstrap() {
 // function to "deposit" funds to this account
 // this should do the internal record keeping with
 // the `_funds` table
-void rock_paper_scissors::handle_deposit(const name& player, const asset& dep) {
+void rock_paper_scissors::handle_deposit(const name& player, const asset& dep) { 
+	print_f("Player (%) deposited %\n", player, dep);
+    	const auto& iter = _funds.find(player.value);
+	// If no record of the player is found, create one
+    	if (iter == _funds.end()) {
+        	_funds.emplace(get_self(), [&](auto& elem) {
+            		elem.player = player;
+            		elem.deposit = dep;
+        	});
+	// Increment the amount the player has
+    	} else {
+        	_funds.modify(iter, get_self(), [&](auto& elem) {
+            		elem.deposit += dep;
+        	});
+    	}
 }
 
 // use this action if this contract is deployed to the `eosio` account
