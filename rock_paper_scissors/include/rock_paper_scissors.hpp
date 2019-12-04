@@ -44,8 +44,9 @@ CONTRACT rock_paper_scissors : public contract {
 
         TABLE game {
             uint64_t game_id;
-            std::map<name, player_state> players;
-            std::vector<name> clear_winners;
+	    name player1;
+	    name player2;
+	    name winner;
             name last_eval_player;
             time_point game_deadline;
             asset wager_pool;
